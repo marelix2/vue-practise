@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html xmlns:v-on="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Kurs Vue.js - Przykład 10</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/spectre.css/0.5.0/spectre.min.css">
+    <style>
+        .container {
+            margin-top: 100px;
+            margin-bottom: 100px;
+        }
+
+        [v-cloak] {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container grid-lg">
+
+</div>
+<script id="app-template" type="text/x-template">
+    <div id="app" v-cloak>
+        <h1>{{countingNumber}}</h1>
+        <button v-on:click="upadateCounter()" :disabled="isDisabled"> Count</button>
+        <button v-on:click="refreshCounter()"> Refresh</button>
+    </div>
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.5.13/vue.js"></script>
+<script>
+
+    const vm = new Vue({
+
+        template: "#app-template",
+        data: {
+            countingNumber: 15,
+            countingFunction: null,
+            isDisabled: false
+        },
+        computed: {},
+        methods: {
+            upadateCounter: function () {
+
+                this.isDisabled = true;
+                this.countingFunction = setInterval(() => {
+                    if (this.countingNumber > 0) {
+                        this.countingNumber -= 1;
+                    } else {
+                        this.stopCounting();
+                    }
+                }, 1000);
+            },
+            stopCounting: function () {
+                clearTimeout(this.countingFunction);
+                this.isDisabled = false;
+            },
+            refreshCounter: function () {
+                this.stopCounting();
+                this.countingNumber = 15;
+            }
+        }
+    });
+
+    vm.$mount();
+    document.querySelector(".container").appendChild(vm.$el);
+</script>
+</body>
+</html>
